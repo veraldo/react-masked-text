@@ -1,23 +1,23 @@
-# react-native-masked-text
+# react-masked-text
 
-This is a simple masked text (normal text and input text) component for React-Native.
+This is a simple masked text (normal text and input text) component for React.
 
 Thanks to [vanilla-masker](https://github.com/BankFacil/vanilla-masker) =).
 Thanks to [moment](http://momentjs.com/) =).
-
+Thanks to [benhurott](https://github.com/benhurott/react-native-masked-text)
 
 ## Supported Versions
-React-native: 0.32.0 or higher
+React: 16.0.0 or higher
 
 ## Install
-`npm install react-native-masked-text --save`
+`npm install react-masked-text --save`
 
 ## Usage (TextInputMask)
 ```jsx
 import React, {Component} from 'react';
 
 // import the component
-import {TextInputMask} from 'react-native-masked-text';
+import {TextInputMask} from 'react-masked-text';
 
 export default class MyComponent extends Component {
 	constructor(props) {
