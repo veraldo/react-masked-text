@@ -8,9 +8,10 @@
       "url": "https://www.opensource.org/licenses/mit-license.php"
     }
   ],
-  "main": "index.js",
+  "main": "dist/text-input-mask.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "rollup -c -i src/text-input-mask.js -o dist/text-input-mask.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,12 @@
     "tinymask": "^1.0.2"
   },
   "devDependencies": {
-    "jest": "^19.0.2"
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^19.0.2",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.1",
+    "rollup-plugin-node-resolve": "^3.0.0"
   }
 }
