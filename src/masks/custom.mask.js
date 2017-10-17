@@ -1,4 +1,4 @@
-import * as TinyMask from 'tinymask';
+const TinyMask = require('tinymask');
 
 import BaseMask from './_base.mask';
 
