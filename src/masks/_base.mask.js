@@ -1,4 +1,7 @@
-import * as VMasker from '../internal-dependencies/vanilla-masker';
+// import * as VanillaMasker from '../internal-dependencies/vanilla-masker';
+
+
+const VMasker = require('./internal-dependencies/vanilla-masker.js');
 
 export default class BaseMask {
 

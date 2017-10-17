@@ -1,7 +1,13 @@
 // rollup.config.js
 const babel = require("rollup-plugin-babel");
-const commonjs = require("rollup-plugin-commonjs");
 const resolve = require("rollup-plugin-node-resolve");
+const copy = require("rollup-plugin-copy");
+
+let includePathOptions = {
+  paths: ['src'],
+  extensions: ['.js']
+};
+
 
 export default {
   input: "src/text-input-mask.js",
@@ -19,6 +25,7 @@ export default {
     react: 'react'
   },
   plugins: [
+    copy({'src/internal-dependencies': 'dist/internal-dependencies'}),
     resolve({jsnext: true}),
     babel()
   ]
