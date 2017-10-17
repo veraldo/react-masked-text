@@ -1,4 +1,5 @@
-import TinyMask from 'tinymask';
+import * as TinyMask from 'tinymask';
+
 import BaseMask from './_base.mask';
 
 const DEFAULT_TRANSLATION = {
@@ -18,7 +19,7 @@ const DEFAULT_TRANSLATION = {
 
 var invalidValues = [null, undefined, ''];
 
-export default class CustomMask extends BaseMask {
+export class CustomMask extends BaseMask {
 	static getType() {
 		return 'custom';
 	}

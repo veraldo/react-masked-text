@@ -9,7 +9,7 @@ const MONEY_MASK_SETTINGS = {
     zeroCents: false
 };
 
-export default class MoneyMask extends BaseMask {
+export class MoneyMask extends BaseMask {
     static getType() {
         return 'money';
     }

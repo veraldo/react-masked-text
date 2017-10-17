@@ -22,7 +22,7 @@ const validateCnpj = cnpj => {
     return (((dig1*10)+dig2) == digito);  
 }
 
-export default class CnpjMask extends BaseMask {
+export class CnpjMask extends BaseMask {
     static getType() {
         return 'cnpj';
     }

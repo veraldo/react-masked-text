@@ -1,11 +1,11 @@
 import BaseMask from './_base.mask';
-var moment = require('moment');
+import moment from 'moment';
 
 const DATETIME_MASK_SETTINGS = {
 	format: 'DD/MM/YYYY HH:mm:ss'
 };
 
-export default class DatetimeMask extends BaseMask {
+export class DatetimeMask extends BaseMask {
     static getType() {
         return 'datetime';
     }

@@ -1,20 +1,11 @@
-'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('moment')) :
+	typeof define === 'function' && define.amd ? define(['react', 'moment'], factory) :
+	(global.ReactTextMask = factory(global.react,global.moment));
+}(this, (function (React,moment) { 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var React = require('react');
-var React__default = _interopDefault(React);
-var TinyMask = _interopDefault(require('tinymask'));
-
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-
-
-
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
+var React__default = 'default' in React ? React['default'] : React;
+moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -246,218 +237,222 @@ var possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
-var vanillaMasker = createCommonjsModule(function (module, exports) {
-  (function (root, factory) {
-    if (typeof undefined === 'function' && undefined.amd) {
-      undefined(factory);
-    } else {
-      module.exports = factory();
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(factory);
+  } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+    module.exports = factory();
+  } else {
+    root.VMasker = factory();
+  }
+})(undefined, function () {
+  var DIGIT = "9",
+      ALPHA = "A",
+      ALPHANUM = "S",
+      BY_PASS_KEYS = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93],
+      isAllowedKeyCode = function isAllowedKeyCode(keyCode) {
+    for (var i = 0, len = BY_PASS_KEYS.length; i < len; i++) {
+      if (keyCode == BY_PASS_KEYS[i]) {
+        return false;
+      }
     }
-  })(commonjsGlobal, function () {
-    var DIGIT = "9",
-        ALPHA = "A",
-        ALPHANUM = "S",
-        BY_PASS_KEYS = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93],
-        isAllowedKeyCode = function isAllowedKeyCode(keyCode) {
-      for (var i = 0, len = BY_PASS_KEYS.length; i < len; i++) {
-        if (keyCode == BY_PASS_KEYS[i]) {
-          return false;
-        }
+    return true;
+  },
+      mergeMoneyOptions = function mergeMoneyOptions(opts) {
+    opts = opts || {};
+    opts = {
+      precision: opts.hasOwnProperty("precision") ? opts.precision : 2,
+      separator: opts.separator || ",",
+      delimiter: opts.delimiter || ".",
+      unit: opts.unit ? opts.unit + ' ' : "",
+      //unit: opts.unit && (opts.unit.replace(/[\s]/g,'') + " ") || "",
+      suffixUnit: opts.suffixUnit && " " + opts.suffixUnit.replace(/[\s]/g, '') || "",
+      zeroCents: opts.zeroCents,
+      lastOutput: opts.lastOutput
+    };
+    opts.moneyPrecision = opts.zeroCents ? 0 : opts.precision;
+    return opts;
+  },
+
+  // Fill wildcards past index in output with placeholder
+  addPlaceholdersToOutput = function addPlaceholdersToOutput(output, index, placeholder) {
+    for (; index < output.length; index++) {
+      if (output[index] === DIGIT || output[index] === ALPHA || output[index] === ALPHANUM) {
+        output[index] = placeholder;
       }
-      return true;
-    },
-        mergeMoneyOptions = function mergeMoneyOptions(opts) {
-      opts = opts || {};
-      opts = {
-        precision: opts.hasOwnProperty("precision") ? opts.precision : 2,
-        separator: opts.separator || ",",
-        delimiter: opts.delimiter || ".",
-        unit: opts.unit ? opts.unit + ' ' : "",
-        //unit: opts.unit && (opts.unit.replace(/[\s]/g,'') + " ") || "",
-        suffixUnit: opts.suffixUnit && " " + opts.suffixUnit.replace(/[\s]/g, '') || "",
-        zeroCents: opts.zeroCents,
-        lastOutput: opts.lastOutput
-      };
-      opts.moneyPrecision = opts.zeroCents ? 0 : opts.precision;
-      return opts;
-    },
+    }
+    return output;
+  };
 
-    // Fill wildcards past index in output with placeholder
-    addPlaceholdersToOutput = function addPlaceholdersToOutput(output, index, placeholder) {
-      for (; index < output.length; index++) {
-        if (output[index] === DIGIT || output[index] === ALPHA || output[index] === ALPHANUM) {
-          output[index] = placeholder;
-        }
+  var VanillaMasker = function VanillaMasker(elements) {
+    this.elements = elements;
+  };
+
+  VanillaMasker.prototype.unbindElementToMask = function () {
+    for (var i = 0, len = this.elements.length; i < len; i++) {
+      this.elements[i].lastOutput = "";
+      this.elements[i].onkeyup = false;
+      this.elements[i].onkeydown = false;
+
+      if (this.elements[i].value.length) {
+        this.elements[i].value = this.elements[i].value.replace(/\D/g, '');
       }
-      return output;
-    };
+    }
+  };
 
-    var VanillaMasker = function VanillaMasker(elements) {
-      this.elements = elements;
-    };
+  VanillaMasker.prototype.bindElementToMask = function (maskFunction) {
+    var that = this,
+        onType = function onType(e) {
+      e = e || window.event;
+      var source = e.target || e.srcElement;
 
-    VanillaMasker.prototype.unbindElementToMask = function () {
-      for (var i = 0, len = this.elements.length; i < len; i++) {
-        this.elements[i].lastOutput = "";
-        this.elements[i].onkeyup = false;
-        this.elements[i].onkeydown = false;
-
-        if (this.elements[i].value.length) {
-          this.elements[i].value = this.elements[i].value.replace(/\D/g, '');
-        }
-      }
-    };
-
-    VanillaMasker.prototype.bindElementToMask = function (maskFunction) {
-      var that = this,
-          onType = function onType(e) {
-        e = e || window.event;
-        var source = e.target || e.srcElement;
-
-        if (isAllowedKeyCode(e.keyCode)) {
-          setTimeout(function () {
-            that.opts.lastOutput = source.lastOutput;
-            source.value = VMasker[maskFunction](source.value, that.opts);
-            source.lastOutput = source.value;
-            if (source.setSelectionRange && that.opts.suffixUnit) {
-              source.setSelectionRange(source.value.length, source.value.length - that.opts.suffixUnit.length);
-            }
-          }, 0);
-        }
-      };
-      for (var i = 0, len = this.elements.length; i < len; i++) {
-        this.elements[i].lastOutput = "";
-        this.elements[i].onkeyup = onType;
-        if (this.elements[i].value.length) {
-          this.elements[i].value = VMasker[maskFunction](this.elements[i].value, this.opts);
-        }
-      }
-    };
-
-    VanillaMasker.prototype.maskMoney = function (opts) {
-      this.opts = mergeMoneyOptions(opts);
-      this.bindElementToMask("toMoney");
-    };
-
-    VanillaMasker.prototype.maskNumber = function () {
-      this.opts = {};
-      this.bindElementToMask("toNumber");
-    };
-
-    VanillaMasker.prototype.maskAlphaNum = function () {
-      this.opts = {};
-      this.bindElementToMask("toAlphaNumeric");
-    };
-
-    VanillaMasker.prototype.maskPattern = function (pattern) {
-      this.opts = { pattern: pattern };
-      this.bindElementToMask("toPattern");
-    };
-
-    VanillaMasker.prototype.unMask = function () {
-      this.unbindElementToMask();
-    };
-
-    var VMasker = function VMasker(el) {
-      if (!el) {
-        throw new Error("VanillaMasker: There is no element to bind.");
-      }
-      var elements = "length" in el ? el.length ? el : [] : [el];
-      return new VanillaMasker(elements);
-    };
-
-    VMasker.toMoney = function (value, opts) {
-      opts = mergeMoneyOptions(opts);
-      if (opts.zeroCents) {
-        opts.lastOutput = opts.lastOutput || "";
-        var zeroMatcher = "(" + opts.separator + "[0]{0," + opts.precision + "})",
-            zeroRegExp = new RegExp(zeroMatcher, "g"),
-            digitsLength = value.toString().replace(/[\D]/g, "").length || 0,
-            lastDigitLength = opts.lastOutput.toString().replace(/[\D]/g, "").length || 0;
-        value = value.toString().replace(zeroRegExp, "");
-        if (digitsLength < lastDigitLength) {
-          value = value.slice(0, value.length - 1);
-        }
-      }
-      var number = value.toString().replace(/[\D]/g, ""),
-          clearDelimiter = new RegExp("^(0|\\" + opts.delimiter + ")"),
-          clearSeparator = new RegExp("(\\" + opts.separator + ")$"),
-          money = number.substr(0, number.length - opts.moneyPrecision),
-          masked = money.substr(0, money.length % 3),
-          cents = new Array(opts.precision + 1).join("0");
-      money = money.substr(money.length % 3, money.length);
-      for (var i = 0, len = money.length; i < len; i++) {
-        if (i % 3 === 0) {
-          masked += opts.delimiter;
-        }
-        masked += money[i];
-      }
-      masked = masked.replace(clearDelimiter, "");
-      masked = masked.length ? masked : "0";
-      if (!opts.zeroCents) {
-        var beginCents = number.length - opts.precision,
-            centsValue = number.substr(beginCents, opts.precision),
-            centsLength = centsValue.length,
-            centsSliced = opts.precision > centsLength ? opts.precision : centsLength;
-        cents = (cents + centsValue).slice(-centsSliced);
-      }
-
-      var unitToApply = opts.unit[opts.unit.length - 1] === ' ' ? opts.unit.substring(0, opts.unit.length - 1) : opts.unit;
-      var output = unitToApply + masked + opts.separator + cents + opts.suffixUnit;
-      return output.replace(clearSeparator, "");
-    };
-
-    VMasker.toPattern = function (value, opts) {
-      var pattern = (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' ? opts.pattern : opts,
-          patternChars = pattern.replace(/\W/g, ''),
-          output = pattern.split(""),
-          values = value.toString().replace(/\W/g, ""),
-          charsValues = values.replace(/\W/g, ''),
-          index = 0,
-          i,
-          outputLength = output.length,
-          placeholder = (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' ? opts.placeholder : undefined;
-
-      for (i = 0; i < outputLength; i++) {
-        // Reached the end of input
-        if (index >= values.length) {
-          if (patternChars.length == charsValues.length) {
-            return output.join("");
-          } else if (placeholder !== undefined && patternChars.length > charsValues.length) {
-            return addPlaceholdersToOutput(output, i, placeholder).join("");
-          } else {
-            break;
+      if (isAllowedKeyCode(e.keyCode)) {
+        setTimeout(function () {
+          that.opts.lastOutput = source.lastOutput;
+          source.value = VMasker[maskFunction](source.value, that.opts);
+          source.lastOutput = source.value;
+          if (source.setSelectionRange && that.opts.suffixUnit) {
+            source.setSelectionRange(source.value.length, source.value.length - that.opts.suffixUnit.length);
           }
+        }, 0);
+      }
+    };
+    for (var i = 0, len = this.elements.length; i < len; i++) {
+      this.elements[i].lastOutput = "";
+      this.elements[i].onkeyup = onType;
+      if (this.elements[i].value.length) {
+        this.elements[i].value = VMasker[maskFunction](this.elements[i].value, this.opts);
+      }
+    }
+  };
+
+  VanillaMasker.prototype.maskMoney = function (opts) {
+    this.opts = mergeMoneyOptions(opts);
+    this.bindElementToMask("toMoney");
+  };
+
+  VanillaMasker.prototype.maskNumber = function () {
+    this.opts = {};
+    this.bindElementToMask("toNumber");
+  };
+
+  VanillaMasker.prototype.maskAlphaNum = function () {
+    this.opts = {};
+    this.bindElementToMask("toAlphaNumeric");
+  };
+
+  VanillaMasker.prototype.maskPattern = function (pattern) {
+    this.opts = { pattern: pattern };
+    this.bindElementToMask("toPattern");
+  };
+
+  VanillaMasker.prototype.unMask = function () {
+    this.unbindElementToMask();
+  };
+
+  var VMasker = function VMasker(el) {
+    if (!el) {
+      throw new Error("VanillaMasker: There is no element to bind.");
+    }
+    var elements = "length" in el ? el.length ? el : [] : [el];
+    return new VanillaMasker(elements);
+  };
+
+  VMasker.toMoney = function (value, opts) {
+    opts = mergeMoneyOptions(opts);
+    if (opts.zeroCents) {
+      opts.lastOutput = opts.lastOutput || "";
+      var zeroMatcher = "(" + opts.separator + "[0]{0," + opts.precision + "})",
+          zeroRegExp = new RegExp(zeroMatcher, "g"),
+          digitsLength = value.toString().replace(/[\D]/g, "").length || 0,
+          lastDigitLength = opts.lastOutput.toString().replace(/[\D]/g, "").length || 0;
+      value = value.toString().replace(zeroRegExp, "");
+      if (digitsLength < lastDigitLength) {
+        value = value.slice(0, value.length - 1);
+      }
+    }
+    var number = value.toString().replace(/[\D]/g, ""),
+        clearDelimiter = new RegExp("^(0|\\" + opts.delimiter + ")"),
+        clearSeparator = new RegExp("(\\" + opts.separator + ")$"),
+        money = number.substr(0, number.length - opts.moneyPrecision),
+        masked = money.substr(0, money.length % 3),
+        cents = new Array(opts.precision + 1).join("0");
+    money = money.substr(money.length % 3, money.length);
+    for (var i = 0, len = money.length; i < len; i++) {
+      if (i % 3 === 0) {
+        masked += opts.delimiter;
+      }
+      masked += money[i];
+    }
+    masked = masked.replace(clearDelimiter, "");
+    masked = masked.length ? masked : "0";
+    if (!opts.zeroCents) {
+      var beginCents = number.length - opts.precision,
+          centsValue = number.substr(beginCents, opts.precision),
+          centsLength = centsValue.length,
+          centsSliced = opts.precision > centsLength ? opts.precision : centsLength;
+      cents = (cents + centsValue).slice(-centsSliced);
+    }
+
+    var unitToApply = opts.unit[opts.unit.length - 1] === ' ' ? opts.unit.substring(0, opts.unit.length - 1) : opts.unit;
+    var output = unitToApply + masked + opts.separator + cents + opts.suffixUnit;
+    return output.replace(clearSeparator, "");
+  };
+
+  VMasker.toPattern = function (value, opts) {
+    var pattern = (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' ? opts.pattern : opts,
+        patternChars = pattern.replace(/\W/g, ''),
+        output = pattern.split(""),
+        values = value.toString().replace(/\W/g, ""),
+        charsValues = values.replace(/\W/g, ''),
+        index = 0,
+        i,
+        outputLength = output.length,
+        placeholder = (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' ? opts.placeholder : undefined;
+
+    for (i = 0; i < outputLength; i++) {
+      // Reached the end of input
+      if (index >= values.length) {
+        if (patternChars.length == charsValues.length) {
+          return output.join("");
+        } else if (placeholder !== undefined && patternChars.length > charsValues.length) {
+          return addPlaceholdersToOutput(output, i, placeholder).join("");
+        } else {
+          break;
         }
-        // Remaining chars in input
-        else {
-            if (output[i] === DIGIT && values[index].match(/[0-9]/) || output[i] === ALPHA && values[index].match(/[a-zA-Z]/) || output[i] === ALPHANUM && values[index].match(/[0-9a-zA-Z]/)) {
-              output[i] = values[index++];
-            } else if (output[i] === DIGIT || output[i] === ALPHA || output[i] === ALPHANUM) {
-              if (placeholder !== undefined) {
-                return addPlaceholdersToOutput(output, i, placeholder).join("");
-              } else {
-                return output.slice(0, i).join("");
-              }
+      }
+      // Remaining chars in input
+      else {
+          if (output[i] === DIGIT && values[index].match(/[0-9]/) || output[i] === ALPHA && values[index].match(/[a-zA-Z]/) || output[i] === ALPHANUM && values[index].match(/[0-9a-zA-Z]/)) {
+            output[i] = values[index++];
+          } else if (output[i] === DIGIT || output[i] === ALPHA || output[i] === ALPHANUM) {
+            if (placeholder !== undefined) {
+              return addPlaceholdersToOutput(output, i, placeholder).join("");
+            } else {
+              return output.slice(0, i).join("");
             }
           }
-      }
-      return output.join("").substr(0, i);
-    };
+        }
+    }
+    return output.join("").substr(0, i);
+  };
 
-    VMasker.toNumber = function (value) {
-      return value.toString().replace(/(?!^-)[^0-9]/g, "");
-    };
+  VMasker.toNumber = function (value) {
+    return value.toString().replace(/(?!^-)[^0-9]/g, "");
+  };
 
-    VMasker.toAlphaNumeric = function (value) {
-      return value.toString().replace(/[^a-z0-9 ]+/i, "");
-    };
+  VMasker.toAlphaNumeric = function (value) {
+    return value.toString().replace(/[^a-z0-9 ]+/i, "");
+  };
 
-    return VMasker;
-  });
+  return VMasker;
 });
 
-// var VMasker = require('../internal-dependencies/vanilla-masker');
+
+
+var VMasker = Object.freeze({
+
+});
 
 var BaseMask = function () {
 	function BaseMask() {
@@ -472,7 +467,7 @@ var BaseMask = function () {
 	}, {
 		key: 'getVMasker',
 		value: function getVMasker() {
-			return vanillaMasker;
+			return VMasker;
 		}
 	}, {
 		key: 'mergeSettings',
@@ -589,60 +584,6 @@ var CelPhoneMask = function (_BaseMask) {
 	return CelPhoneMask;
 }(BaseMask);
 
-var CNPJ_MASK = '99.999.999/9999-99';
-
-var validateCnpj = function validateCnpj(cnpj) {
-    var valida = new Array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
-    var dig1 = new Number();
-    var dig2 = new Number();
-    var i = 0;
-
-    var exp = /\.|\-|\//g;
-    cnpj = cnpj.toString().replace(exp, "");
-    var digito = new Number(eval(cnpj.charAt(12) + cnpj.charAt(13)));
-
-    for (i = 0; i < valida.length; i++) {
-        dig1 += i > 0 ? cnpj.charAt(i - 1) * valida[i] : 0;
-        dig2 += cnpj.charAt(i) * valida[i];
-    }
-    dig1 = dig1 % 11 < 2 ? 0 : 11 - dig1 % 11;
-    dig2 = dig2 % 11 < 2 ? 0 : 11 - dig2 % 11;
-
-    return dig1 * 10 + dig2 == digito;
-};
-
-var CnpjMask = function (_BaseMask) {
-    inherits(CnpjMask, _BaseMask);
-
-    function CnpjMask() {
-        classCallCheck(this, CnpjMask);
-        return possibleConstructorReturn(this, (CnpjMask.__proto__ || Object.getPrototypeOf(CnpjMask)).apply(this, arguments));
-    }
-
-    createClass(CnpjMask, [{
-        key: 'getValue',
-        value: function getValue(value, settings) {
-            return this.getVMasker().toPattern(value, CNPJ_MASK);
-        }
-    }, {
-        key: 'getRawValue',
-        value: function getRawValue(maskedValue, settings) {
-            return get(CnpjMask.prototype.__proto__ || Object.getPrototypeOf(CnpjMask.prototype), 'removeNotNumbers', this).call(this, maskedValue);
-        }
-    }, {
-        key: 'validate',
-        value: function validate(value, settings) {
-            return validateCnpj(value);
-        }
-    }], [{
-        key: 'getType',
-        value: function getType() {
-            return 'cnpj';
-        }
-    }]);
-    return CnpjMask;
-}(BaseMask);
-
 var CPF_MASK = '999.999.999-99';
 
 var validateCPF = function validateCPF(cpf) {
@@ -726,6 +667,158 @@ var CpfMask = function (_BaseMask) {
   return CpfMask;
 }(BaseMask);
 
+var CREDIT_CARD_MASK = '9999 9999 9999 9999';
+var CREDIT_CARD_OBFUSCATED_MASK = '9999 **** **** 9999';
+
+var CREDIT_CARD_SETTINGS = {
+    obfuscated: false
+};
+
+var CreditCardMask = function (_BaseMask) {
+    inherits(CreditCardMask, _BaseMask);
+
+    function CreditCardMask() {
+        classCallCheck(this, CreditCardMask);
+        return possibleConstructorReturn(this, (CreditCardMask.__proto__ || Object.getPrototypeOf(CreditCardMask)).apply(this, arguments));
+    }
+
+    createClass(CreditCardMask, [{
+        key: 'getValue',
+        value: function getValue(value, settings) {
+            var selectedMask = this._getMask(settings);
+            return this.getVMasker().toPattern(value, selectedMask);
+        }
+    }, {
+        key: 'validate',
+        value: function validate(value, settings) {
+            if (!!value) {
+                var selectedMask = this._getMask(settings);
+                return value.length === selectedMask.length;
+            }
+
+            return true;
+        }
+    }, {
+        key: 'getRawValue',
+        value: function getRawValue(maskedValue, settings) {
+            if (!maskedValue) return [];
+
+            return maskedValue.split(' ').map(function (val) {
+                if (!val) return '';
+
+                return val.trim();
+            });
+        }
+    }, {
+        key: '_getMask',
+        value: function _getMask(settings) {
+            var mergedSettings = get(CreditCardMask.prototype.__proto__ || Object.getPrototypeOf(CreditCardMask.prototype), 'mergeSettings', this).call(this, CREDIT_CARD_SETTINGS, settings);
+            var selectedMask = mergedSettings.obfuscated ? CREDIT_CARD_OBFUSCATED_MASK : CREDIT_CARD_MASK;
+            return selectedMask;
+        }
+    }], [{
+        key: 'getType',
+        value: function getType() {
+            return 'credit-card';
+        }
+    }]);
+    return CreditCardMask;
+}(BaseMask);
+
+function TinyMask(pattern, options) {
+	var defaultOptions = {
+		translation: {
+			'9': function _(val) {
+				return val.replace(/[^0-9]+/g, '');
+			},
+			'A': function A(val) {
+				return val.replace(/[^a-zA-Z]+/g, '');
+			},
+			'S': function S(val) {
+				return val.replace(/[^a-zA-Z0-9]+/g, '');
+			},
+			'*': function _(val) {
+				return val;
+			}
+		},
+		invalidValues: [null, undefined, '']
+	};
+
+	var opt = options || {};
+	this._options = {
+		translation: Object.assign(defaultOptions.translation, opt.translation),
+		invalidValues: Object.assign(defaultOptions.invalidValues, opt.invalidValues),
+		pattern: pattern
+	};
+
+	this._handlers = [];
+
+	for (var i = 0; i < pattern.length; i++) {
+		var element = pattern[i];
+
+		var result = this._options.translation[element] || element;
+		this._handlers.push(result);
+	}
+}
+
+TinyMask.prototype._isString = function (value) {
+	return typeof value === "string";
+};
+
+TinyMask.prototype.mask = function (value) {
+	var result = '';
+
+	var val = String(value);
+
+	if (val.length === 0) return;
+
+	var maskSize = this._handlers.length;
+	var maskResolved = 0;
+
+	var valueResolved = 0;
+
+	while (maskResolved < maskSize) {
+		var hand = this._handlers[maskResolved];
+		var char = val[valueResolved];
+
+		if (char === undefined) {
+			break;
+		}
+
+		if (char === hand) {
+			result += char;
+			maskResolved++;
+			valueResolved++;
+			continue;
+		}
+
+		if (this._isString(hand)) {
+			result += hand;
+			maskResolved++;
+			continue;
+		}
+
+		var parsed = hand(char);
+
+		if (this._options.invalidValues.indexOf(parsed) < 0) {
+			result += parsed;
+			valueResolved++;
+		} else {
+			break;
+		}
+
+		maskResolved++;
+	}
+
+	return result;
+};
+
+module.exports = TinyMask;
+
+var TinyMask$1 = Object.freeze({
+
+});
+
 var DEFAULT_TRANSLATION = {
 	'9': function _(val) {
 		return val.replace(/[^0-9]+/g, '');
@@ -764,7 +857,7 @@ var CustomMask = function (_BaseMask) {
 
 			var translation = this.mergeSettings(DEFAULT_TRANSLATION, settings.translation);
 
-			var masked = new TinyMask(mask, { translation: translation }).mask(this.removeWhiteSpaces(value));
+			var masked = new TinyMask$1(mask, { translation: translation }).mask(this.removeWhiteSpaces(value));
 			return masked;
 		}
 	}, {
@@ -793,8 +886,6 @@ var CustomMask = function (_BaseMask) {
 	}]);
 	return CustomMask;
 }(BaseMask);
-
-var moment = require('moment');
 
 var DATETIME_MASK_SETTINGS = {
     format: 'DD/MM/YYYY HH:mm:ss'
@@ -988,76 +1079,72 @@ var ZipCodeMask = function (_BaseMask) {
     return ZipCodeMask;
 }(BaseMask);
 
-var CREDIT_CARD_MASK = '9999 9999 9999 9999';
-var CREDIT_CARD_OBFUSCATED_MASK = '9999 **** **** 9999';
+var CNPJ_MASK = '99.999.999/9999-99';
 
-var CREDIT_CARD_SETTINGS = {
-    obfuscated: false
+var validateCnpj = function validateCnpj(cnpj) {
+    var valida = new Array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
+    var dig1 = new Number();
+    var dig2 = new Number();
+    var i = 0;
+
+    var exp = /\.|\-|\//g;
+    cnpj = cnpj.toString().replace(exp, "");
+    var digito = new Number(eval(cnpj.charAt(12) + cnpj.charAt(13)));
+
+    for (i = 0; i < valida.length; i++) {
+        dig1 += i > 0 ? cnpj.charAt(i - 1) * valida[i] : 0;
+        dig2 += cnpj.charAt(i) * valida[i];
+    }
+    dig1 = dig1 % 11 < 2 ? 0 : 11 - dig1 % 11;
+    dig2 = dig2 % 11 < 2 ? 0 : 11 - dig2 % 11;
+
+    return dig1 * 10 + dig2 == digito;
 };
 
-var CreditCardMask = function (_BaseMask) {
-    inherits(CreditCardMask, _BaseMask);
+var CnpjMask = function (_BaseMask) {
+    inherits(CnpjMask, _BaseMask);
 
-    function CreditCardMask() {
-        classCallCheck(this, CreditCardMask);
-        return possibleConstructorReturn(this, (CreditCardMask.__proto__ || Object.getPrototypeOf(CreditCardMask)).apply(this, arguments));
+    function CnpjMask() {
+        classCallCheck(this, CnpjMask);
+        return possibleConstructorReturn(this, (CnpjMask.__proto__ || Object.getPrototypeOf(CnpjMask)).apply(this, arguments));
     }
 
-    createClass(CreditCardMask, [{
+    createClass(CnpjMask, [{
         key: 'getValue',
         value: function getValue(value, settings) {
-            var selectedMask = this._getMask(settings);
-            return this.getVMasker().toPattern(value, selectedMask);
-        }
-    }, {
-        key: 'validate',
-        value: function validate(value, settings) {
-            if (!!value) {
-                var selectedMask = this._getMask(settings);
-                return value.length === selectedMask.length;
-            }
-
-            return true;
+            return this.getVMasker().toPattern(value, CNPJ_MASK);
         }
     }, {
         key: 'getRawValue',
         value: function getRawValue(maskedValue, settings) {
-            if (!maskedValue) return [];
-
-            return maskedValue.split(' ').map(function (val) {
-                if (!val) return '';
-
-                return val.trim();
-            });
+            return get(CnpjMask.prototype.__proto__ || Object.getPrototypeOf(CnpjMask.prototype), 'removeNotNumbers', this).call(this, maskedValue);
         }
     }, {
-        key: '_getMask',
-        value: function _getMask(settings) {
-            var mergedSettings = get(CreditCardMask.prototype.__proto__ || Object.getPrototypeOf(CreditCardMask.prototype), 'mergeSettings', this).call(this, CREDIT_CARD_SETTINGS, settings);
-            var selectedMask = mergedSettings.obfuscated ? CREDIT_CARD_OBFUSCATED_MASK : CREDIT_CARD_MASK;
-            return selectedMask;
+        key: 'validate',
+        value: function validate(value, settings) {
+            return validateCnpj(value);
         }
     }], [{
         key: 'getType',
         value: function getType() {
-            return 'credit-card';
+            return 'cnpj';
         }
     }]);
-    return CreditCardMask;
+    return CnpjMask;
 }(BaseMask);
 
-module.exports.CelPhoneMask = CelPhoneMask;
-module.exports.CnpjMask = CnpjMask;
-module.exports.CpfMask = CpfMask;
-module.exports.CustomMask = CustomMask;
-module.exports.DatetimeMask = DatetimeMask;
-module.exports.MoneyMask = MoneyMask;
-module.exports.OnlyNumbersMask = OnlyNumbersMask;
-module.exports.ZipCodeMask = ZipCodeMask;
-module.exports.CreditCardMask = CreditCardMask;
+
 
 var Masks = Object.freeze({
-
+	CelPhoneMask: CelPhoneMask,
+	CpfMask: CpfMask,
+	CreditCardMask: CreditCardMask,
+	CustomMask: CustomMask,
+	DatetimeMask: DatetimeMask,
+	MoneyMask: MoneyMask,
+	OnlyNumbersMask: OnlyNumbersMask,
+	ZipCodeMask: ZipCodeMask,
+	CnpjMask: CnpjMask
 });
 
 var maskKeys = Object.keys(Masks);
@@ -1276,4 +1363,6 @@ var TextInputMask = function (_BaseTextComponent) {
 	return TextInputMask;
 }(BaseTextComponent);
 
-module.exports = TextInputMask;
+return TextInputMask;
+
+})));

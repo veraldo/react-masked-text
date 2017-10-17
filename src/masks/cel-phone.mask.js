@@ -7,7 +7,7 @@ const CEL_PHONE_SETTINGS = {
 	dddMask: '(99) '
 };
 
-export default class CelPhoneMask extends BaseMask {
+export class CelPhoneMask extends BaseMask {
     static getType() {
         return 'cel-phone';
     }

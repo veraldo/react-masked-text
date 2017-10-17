@@ -1,6 +1,4 @@
-// var VMasker = require('../internal-dependencies/vanilla-masker');
-
-import VMasker from '../internal-dependencies/vanilla-masker';
+import * as VMasker from '../internal-dependencies/vanilla-masker';
 
 export default class BaseMask {
     getKeyboardType() {
