@@ -217,7 +217,17 @@ var inherits = function (subClass, superClass) {
 
 
 
+var objectWithoutProperties = function (obj, keys) {
+  var target = {};
 
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+};
 
 var possibleConstructorReturn = function (self, call) {
   if (!self) {
@@ -1020,9 +1030,14 @@ var TextInputMask = function (_BaseTextComponent) {
 				customTextInputProps = this.props.customTextInputProps || {};
 			}
 
+			var _props = this.props,
+			    options = _props.options,
+			    props = objectWithoutProperties(_props, ['options']);
+
+
 			return React__default.createElement('input', _extends({
 				ref: INPUT_TEXT_REF
-			}, this.props, customTextInputProps, {
+			}, props, customTextInputProps, {
 				onChange: function onChange(event) {
 					return _this2._onChangeText(event.currentTarget.value);
 				},

@@ -40,12 +40,12 @@ export default class TextInputMask extends BaseTextComponent {
 			customTextInputProps = this.props.customTextInputProps || {}
 		}
 
-		const { options, ...rest } = this.props;
+		const { options, ...props } = this.props;
 
 		return (
 			<input
 				ref={INPUT_TEXT_REF}
-				{...this.rest}
+				{...props}
 				{...customTextInputProps}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
