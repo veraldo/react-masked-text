@@ -24,9 +24,6 @@ export class CustomMask extends BaseMask {
 		return 'custom';
 	}
 
-	getKeyboardType() {
-		return "default";
-	}
 
 	getValue(value, settings) {
 		if (value === '') {

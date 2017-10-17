@@ -1,9 +1,6 @@
 import * as VMasker from '../internal-dependencies/vanilla-masker';
 
 export default class BaseMask {
-    getKeyboardType() {
-        return "numeric";
-    }
 
     getVMasker() {
         return VMasker;

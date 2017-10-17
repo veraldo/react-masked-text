@@ -460,11 +460,6 @@ var BaseMask = function () {
 	}
 
 	createClass(BaseMask, [{
-		key: 'getKeyboardType',
-		value: function getKeyboardType() {
-			return "numeric";
-		}
-	}, {
 		key: 'getVMasker',
 		value: function getVMasker() {
 			return VMasker;
@@ -843,11 +838,6 @@ var CustomMask = function (_BaseMask) {
 	}
 
 	createClass(CustomMask, [{
-		key: 'getKeyboardType',
-		value: function getKeyboardType() {
-			return "default";
-		}
-	}, {
 		key: 'getValue',
 		value: function getValue(value, settings) {
 			if (value === '') {
@@ -1333,11 +1323,6 @@ var TextInputMask = function (_BaseTextComponent) {
 			return true;
 		}
 	}, {
-		key: '_getKeyboardType',
-		value: function _getKeyboardType() {
-			return this.props.keyboardType || this._maskHandler.getKeyboardType();
-		}
-	}, {
 		key: 'render',
 		value: function render() {
 			var _this2 = this;
@@ -1350,8 +1335,7 @@ var TextInputMask = function (_BaseTextComponent) {
 			}
 
 			return React__default.createElement('input', _extends({
-				ref: INPUT_TEXT_REF,
-				keyboardType: this._getKeyboardType()
+				ref: INPUT_TEXT_REF
 			}, this.props, customTextInputProps, {
 				onChange: function onChange(event) {
 					return _this2._onChangeText(event.currentTarget.value);

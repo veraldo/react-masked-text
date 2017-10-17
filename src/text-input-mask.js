@@ -32,10 +32,6 @@ export default class TextInputMask extends BaseTextComponent {
 		return true;
 	}
 
-	_getKeyboardType() {
-		return this.props.keyboardType || this._maskHandler.getKeyboardType()
-	}
-
 	render() {
 		let customTextInputProps = {}
 
@@ -47,7 +43,6 @@ export default class TextInputMask extends BaseTextComponent {
 		return (
 			<input
 				ref={INPUT_TEXT_REF}
-				keyboardType={this._getKeyboardType()}
 				{...this.props}
 				{...customTextInputProps}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
