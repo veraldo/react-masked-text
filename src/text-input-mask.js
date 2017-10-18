@@ -1,12 +1,10 @@
 import BaseTextComponent from './base-text-component';
 import React from 'react';
 
-const INPUT_TEXT_REF = '$input-text';
-
 export default class TextInputMask extends BaseTextComponent {
 
 	getElement() {
-		return this.refs[INPUT_TEXT_REF];
+		return this._input;
 	}
 
 	_onChangeText(text) {
@@ -33,20 +31,13 @@ export default class TextInputMask extends BaseTextComponent {
 	}
 
 	render() {
-		let customTextInputProps = {}
 
-		if (this.props.customTextInput) {
-			Input = this.props.customTextInput
-			customTextInputProps = this.props.customTextInputProps || {}
-		}
-
-		const { options, ...props } = this.props;
+		const { options, onChangeText, ...props } = this.props;
 
 		return (
 			<input
-				ref={INPUT_TEXT_REF}
+				ref={(ref) => {this._input = ref}}
 				{...props}
-				{...customTextInputProps}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
 			/>
