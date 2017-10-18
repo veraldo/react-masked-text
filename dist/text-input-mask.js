@@ -979,8 +979,6 @@ var BaseTextComponent = function (_Component) {
     return BaseTextComponent;
 }(React.Component);
 
-var INPUT_TEXT_REF = '$input-text';
-
 var TextInputMask = function (_BaseTextComponent) {
 	inherits(TextInputMask, _BaseTextComponent);
 
@@ -992,7 +990,7 @@ var TextInputMask = function (_BaseTextComponent) {
 	createClass(TextInputMask, [{
 		key: 'getElement',
 		value: function getElement() {
-			return this.refs[INPUT_TEXT_REF];
+			return this._input;
 		}
 	}, {
 		key: '_onChangeText',
@@ -1023,21 +1021,17 @@ var TextInputMask = function (_BaseTextComponent) {
 		value: function render() {
 			var _this2 = this;
 
-			var customTextInputProps = {};
-
-			if (this.props.customTextInput) {
-				Input = this.props.customTextInput;
-				customTextInputProps = this.props.customTextInputProps || {};
-			}
-
 			var _props = this.props,
 			    options = _props.options,
-			    props = objectWithoutProperties(_props, ['options']);
+			    onChangeText = _props.onChangeText,
+			    props = objectWithoutProperties(_props, ['options', 'onChangeText']);
 
 
 			return React__default.createElement('input', _extends({
-				ref: INPUT_TEXT_REF
-			}, props, customTextInputProps, {
+				ref: function ref(_ref) {
+					_this2._input = _ref;
+				}
+			}, props, {
 				onChange: function onChange(event) {
 					return _this2._onChangeText(event.currentTarget.value);
 				},
