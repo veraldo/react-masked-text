@@ -32,14 +32,15 @@ export default class TextInputMask extends BaseTextComponent {
 
 	render() {
 
-		const { options, onChangeText, ...props } = this.props;
+		const { placeholder, onChangeText, type } = this.props;
 
 		return (
 			<input
 				ref={(ref) => {this._input = ref}}
-				{...props}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
+				type={type}
+				placeholder={placeholder}
 			/>
 		);
 	}
