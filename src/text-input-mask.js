@@ -32,7 +32,7 @@ export default class TextInputMask extends BaseTextComponent {
 
 	render() {
 
-		const { placeholder, onChangeText, type } = this.props;
+		const { disabled, placeholder, type } = this.props;
 
 		return (
 			<input
@@ -40,6 +40,7 @@ export default class TextInputMask extends BaseTextComponent {
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
 				type={type}
+				disabled={disabled}
 				placeholder={placeholder}
 			/>
 		);
