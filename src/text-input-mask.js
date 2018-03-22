@@ -32,7 +32,7 @@ export default class TextInputMask extends BaseTextComponent {
 
 	render() {
 
-		const { disabled, placeholder, type } = this.props;
+		const { name, autofocus, disabled, placeholder, type } = this.props;
 
 		return (
 			<input
@@ -41,7 +41,9 @@ export default class TextInputMask extends BaseTextComponent {
 				value={this.state.value}
 				type={type}
 				disabled={disabled}
+				autofocus={autofocus}
 				placeholder={placeholder}
+				name={name}
 			/>
 		);
 	}
