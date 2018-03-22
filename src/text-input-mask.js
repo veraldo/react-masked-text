@@ -1,5 +1,5 @@
 import BaseTextComponent from './base-text-component';
-import React from 'react';
+import React from 'react'; 
 
 export default class TextInputMask extends BaseTextComponent {
 
@@ -31,8 +31,7 @@ export default class TextInputMask extends BaseTextComponent {
 	}
 
 	render() {
-
-		const { name, autofocus, disabled, placeholder, type } = this.props;
+		const { onBlur, style, name, maxLength, autofocus, disabled, placeholder, type } = this.props;
 
 		return (
 			<input
@@ -44,6 +43,9 @@ export default class TextInputMask extends BaseTextComponent {
 				autofocus={autofocus}
 				placeholder={placeholder}
 				name={name}
+				maxlength={maxLength}
+				style={style}
+				onBlur={onBlur}
 			/>
 		);
 	}
