@@ -154,20 +154,6 @@ var createClass = function () {
 
 
 
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
   var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -217,17 +203,7 @@ var inherits = function (subClass, superClass) {
 
 
 
-var objectWithoutProperties = function (obj, keys) {
-  var target = {};
 
-  for (var i in obj) {
-    if (keys.indexOf(i) >= 0) continue;
-    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-    target[i] = obj[i];
-  }
-
-  return target;
-};
 
 var possibleConstructorReturn = function (self, call) {
   if (!self) {
@@ -1022,21 +998,33 @@ var TextInputMask = function (_BaseTextComponent) {
 			var _this2 = this;
 
 			var _props = this.props,
-			    options = _props.options,
-			    onChangeText = _props.onChangeText,
-			    props = objectWithoutProperties(_props, ['options', 'onChangeText']);
+			    onBlur = _props.onBlur,
+			    style = _props.style,
+			    name = _props.name,
+			    maxLength = _props.maxLength,
+			    autofocus = _props.autofocus,
+			    disabled = _props.disabled,
+			    placeholder = _props.placeholder,
+			    type = _props.type;
 
 
-			return React__default.createElement('input', _extends({
+			return React__default.createElement('input', {
 				ref: function ref(_ref) {
 					_this2._input = _ref;
-				}
-			}, props, {
+				},
 				onChange: function onChange(event) {
 					return _this2._onChangeText(event.currentTarget.value);
 				},
-				value: this.state.value
-			}));
+				value: this.state.value,
+				type: type,
+				disabled: disabled,
+				autofocus: autofocus,
+				placeholder: placeholder,
+				name: name,
+				maxlength: maxLength,
+				style: style,
+				onBlur: onBlur
+			});
 		}
 	}]);
 	return TextInputMask;
