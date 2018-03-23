@@ -251,6 +251,10 @@ var money = MaskService.toMask('money', '123', {
 
 # Changelog
 
+## 0.1.3
+* Nothing changed. Version bump.
+
+
 ## 0.1.2
 * Nothing changed. Version bump.
 
