@@ -1,5 +1,5 @@
 import BaseTextComponent from './base-text-component';
-import React from 'react';
+import React from 'react'; 
 
 export default class TextInputMask extends BaseTextComponent {
 
@@ -31,15 +31,21 @@ export default class TextInputMask extends BaseTextComponent {
 	}
 
 	render() {
-
-		const { options, onChangeText, ...props } = this.props;
+		const { onBlur, style, name, maxLength, autofocus, disabled, placeholder, type } = this.props;
 
 		return (
 			<input
 				ref={(ref) => {this._input = ref}}
-				{...props}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
+				type={type}
+				disabled={disabled}
+				autofocus={autofocus}
+				placeholder={placeholder}
+				name={name}
+				maxlength={maxLength}
+				style={style}
+				onBlur={onBlur}
 			/>
 		);
 	}
