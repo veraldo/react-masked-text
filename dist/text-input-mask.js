@@ -83,7 +83,7 @@
   // import * as VanillaMasker from '../internal-dependencies/vanilla-masker';
 
 
-  var VMasker = require('../internal-dependencies/vanilla-masker.js');
+  var VMasker = require('./internal-dependencies/vanilla-masker.js');
 
   var BaseMask = function () {
   	function BaseMask() {

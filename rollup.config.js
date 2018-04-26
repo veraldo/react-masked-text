@@ -25,7 +25,7 @@ export default {
     react: 'react'
   },
   plugins: [
-    copy({'src/internal-dependencies': 'dist/internal-dependencies'}),
+    copy({'src/masks/internal-dependencies': 'dist/internal-dependencies'}),
     resolve({jsnext: true}),
     babel()
   ]
