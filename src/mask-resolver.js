@@ -3,10 +3,10 @@ import * as Masks from './masks';
 var maskKeys = Object.keys(Masks);
 
 export default class MaskResolver {
-	static resolve(type) {
+	static resolve(kind) {
 		let maskKey = maskKeys.filter(m => {
 			var handler = Masks[m];
-			return handler && handler.getType && handler.getType() === type;
+			return handler && handler.getType && handler.getType() === kind;
 		})[0];
 
 		let handler = Masks[maskKey];

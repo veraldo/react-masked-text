@@ -32,7 +32,7 @@ export class CustomMask extends BaseMask {
 		let { mask } = settings;
 		let translation = this.mergeSettings(DEFAULT_TRANSLATION, settings.translation);
 
-		var masked = new TinyMask(mask, { translation }).mask(this.removeWhiteSpaces(value));
+		var masked = new TinyMask(mask, { translation }).mask(value);
 		return masked;
 	}
 

@@ -1,4 +1,4 @@
-import { DatetimeMask } from '../lib/masks';
+import { DatetimeMask } from '../src/masks';
 var moment = require('moment');
 
 function compareMomentObj(dateTimeA, dateTimeB) {
