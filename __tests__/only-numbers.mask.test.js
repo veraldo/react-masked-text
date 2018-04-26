@@ -1,4 +1,4 @@
-import { OnlyNumbersMask } from '../lib/masks';
+import { OnlyNumbersMask } from '../src/masks';
 
 test('getType results only-numbers', () => {
     var expected = 'only-numbers';
