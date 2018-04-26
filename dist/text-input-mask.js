@@ -83,7 +83,7 @@
   // import * as VanillaMasker from '../internal-dependencies/vanilla-masker';
 
 
-  var VMasker = require('./internal-dependencies/vanilla-masker.js');
+  var VMasker = require('../internal-dependencies/vanilla-masker.js');
 
   var BaseMask = function () {
   	function BaseMask() {
@@ -386,7 +386,7 @@
 
   			var translation = this.mergeSettings(DEFAULT_TRANSLATION, settings.translation);
 
-  			var masked = new TinyMask(mask, { translation: translation }).mask(this.removeWhiteSpaces(value));
+  			var masked = new TinyMask(mask, { translation: translation }).mask(value);
   			return masked;
   		}
   	}, {
@@ -672,7 +672,8 @@
     DatetimeMask: DatetimeMask,
     MoneyMask: MoneyMask,
     OnlyNumbersMask: OnlyNumbersMask,
-    ZipCodeMask: ZipCodeMask
+    ZipCodeMask: ZipCodeMask,
+    CnpjMask: CnpjMask
   });
 
   var maskKeys = Object.keys(Masks);
