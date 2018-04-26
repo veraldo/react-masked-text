@@ -818,10 +818,10 @@ var MaskResolver = function () {
 
 	createClass(MaskResolver, null, [{
 		key: 'resolve',
-		value: function resolve(type) {
+		value: function resolve(kind) {
 			var maskKey = maskKeys.filter(function (m) {
 				var handler = Masks[m];
-				return handler && handler.getType && handler.getType() === type;
+				return handler && handler.getType && handler.getType() === kind;
 			})[0];
 
 			var handler = Masks[maskKey];
@@ -845,6 +845,7 @@ var BaseTextComponent = function (_Component) {
         var _this = possibleConstructorReturn(this, (BaseTextComponent.__proto__ || Object.getPrototypeOf(BaseTextComponent)).call(this, props));
 
         _this.state = {
+            kind: props.kind,
             type: props.type,
             value: '',
             options: null
@@ -903,15 +904,16 @@ var BaseTextComponent = function (_Component) {
     }, {
         key: '_resolveMaskHandler',
         value: function _resolveMaskHandler() {
-            this._maskHandler = MaskResolver.resolve(this.state.type);
+            this._maskHandler = MaskResolver.resolve(this.state.kind);
         }
     }, {
         key: '_bindProps',
         value: function _bindProps(props) {
             var self = this;
-            var changeMaskHandler = this.state.type !== props.type;
+            var changeMaskHandler = this.state.kind !== props.kind;
 
             self.setState({
+                kind: props.kind,
                 type: props.type,
                 options: props.options
             }, function () {

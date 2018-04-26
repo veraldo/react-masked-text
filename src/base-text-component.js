@@ -5,6 +5,7 @@ export default class BaseTextComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            kind: props.kind,
             type: props.type,
             value: '',
             options: null
@@ -59,14 +60,15 @@ export default class BaseTextComponent extends Component {
 	}
 
     _resolveMaskHandler() {
-        this._maskHandler = MaskResolver.resolve(this.state.type);
+        this._maskHandler = MaskResolver.resolve(this.state.kind);
     }
 
     _bindProps(props) {
         let self = this;
-        let changeMaskHandler = this.state.type !== props.type;
+        let changeMaskHandler = this.state.kind !== props.kind;
 
         self.setState({
+            kind: props.kind,
             type: props.type,
             options: props.options
         }, () => {
