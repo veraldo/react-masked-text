@@ -30,17 +30,17 @@ export default class MyComponent extends Component {
 		//	   because in this case, the day and the hour is invalid.
 		let valid = this.refs['myDateText'].isValid();
 
-		// get converted value. Using type=datetime, it returns the moment object.
-		// If it's using type=money, it returns a Number object.
+		// get converted value. Using kind=datetime, it returns the moment object.
+		// If it's using kind=money, it returns a Number object.
 		let rawValue = this.refs['myDateText'].getRawValue();
 	}
 
 	render() {
-		// the type is required but options is required only for some specific types.
+		// the kind is required but options is required only for some specific kinds.
 		return (
 			<TextInputMask
 				ref={'myDateText'}
-				type={'datetime'}
+				kind={'datetime'}
 				options={{
 					format: 'DD-MM-YYYY HH:mm:ss'
 				}} />
@@ -52,7 +52,7 @@ export default class MyComponent extends Component {
 
 ### Props
 
-#### type
+#### kind
 
 *credit-card*: use the mask 9999 9999 9999 9999. It accepts options (see later in this doc). <br />
 *cpf*: use the mask `999.999.999-99` and `numeric` keyboard. <br />
@@ -77,7 +77,7 @@ onChangeText(text) {
 }
 
 <TextInputMask
-	type={'only-numbers'}
+	kind={'only-numbers'}
 	onChangeText={this.onChangeText.bind(this)} />
 ```
 
@@ -97,17 +97,17 @@ checkText(previous, next) {
 }
 
 <TextInputMask
-	type={'only-numbers'}
+	kind={'only-numbers'}
 	checkText={this.checkText.bind(this)} />
 ```
 
 
 #### Options
 
-Some types accept options, use it like this: `<TextInputMask type={'money'} options={{ unit: 'US$' }} />`
+Some kinds accept options, use it like this: `<TextInputMask kind={'money'} options={{ unit: 'US$' }} />`
 
 
-**For `type={'money'}`** <br />
+**For `kind={'money'}`** <br />
 * *options={...}*
 	* `precision` (Number, default 2): the decimal places.
 	* `separator` (String, default ','): the decimal separator.
@@ -116,12 +116,12 @@ Some types accept options, use it like this: `<TextInputMask type={'money'} opti
 	* `suffixUnit` (String, default ''): the suffix text.
 	* `zeroCents` (Boolean, default false): if must show cents.
 
-**For `type={'cel-phone'}`** <br />
+**For `kind={'cel-phone'}`** <br />
 * *options={...}*
 	* `withDDD` (Boolean, default true): if the ddd will be include in the mask.
 	* `dddMask` (String, default '(99) '): the default mask applied if `withDDD` is true.
 
-**For `type={'datetime'}`** <br />
+**For `kind={'datetime'}`** <br />
 * *options={...}*
 	* `format` (String, default DD/MM/YYYY HH:mm:ss): moment date format. It accepts the following:
 		* DD/MM/YYYY HH:mm:ss
@@ -133,7 +133,7 @@ Some types accept options, use it like this: `<TextInputMask type={'money'} opti
 		* HH
 		* *You can use all of dates with `-` instead of `/` if you want*
 
-**For `type={'custom'}`** <br />
+**For `kind={'custom'}`** <br />
 * *options={...}*
 
 ```jsx
@@ -190,7 +190,7 @@ Some types accept options, use it like this: `<TextInputMask type={'money'} opti
 
 ```
 
-**For `type={'credit-card'}`** <br />
+**For `kind={'credit-card'}`** <br />
 * *options={...}*
 	* `obfuscated` (Boolean, default false): if the mask must be `9999 **** **** 9999`
 
@@ -225,14 +225,14 @@ Some types accept options, use it like this: `<TextInputMask type={'money'} opti
 If you want, we expose the `MaskService`. You can use it:
 
 **Methods**
-* static toMask(type, value, settings): mask a value.
-	* `type` (String, required): the type of the mask (`cpf`, `datetime`, etc...)
+* static toMask(kind, value, settings): mask a value.
+	* `kind` (String, required): the kind of the mask (`cpf`, `datetime`, etc...)
 	* `value` (String, required): the value to be masked
-	* `settings` (Object, optional): if the mask type accepts options, pass it in the settings parameter
-* static isValid(type, value, settings): validate if the mask and the value match.
-	* `type` (String, required): the type of the mask (`cpf`, `datetime`, etc...)
+	* `settings` (Object, optional): if the mask kind accepts options, pass it in the settings parameter
+* static isValid(kind, value, settings): validate if the mask and the value match.
+	* `kind` (String, required): the kind of the mask (`cpf`, `datetime`, etc...)
 	* `value` (String, required): the value to be masked
-	* `settings` (Object, optional): if the mask type accepts options, pass it in the settings parameter
+	* `settings` (Object, optional): if the mask kind accepts options, pass it in the settings parameter
 
 Ex:
 
