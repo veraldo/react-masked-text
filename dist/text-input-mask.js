@@ -31,6 +31,20 @@
     };
   }();
 
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
   var get = function get(object, property, receiver) {
     if (object === null) object = Function.prototype;
     var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -70,6 +84,18 @@
       }
     });
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  };
+
+  var objectWithoutProperties = function (obj, keys) {
+    var target = {};
+
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
   };
 
   var possibleConstructorReturn = function (self, call) {
@@ -862,38 +888,38 @@
   			return true;
   		}
   	}, {
+  		key: '_propsParsed',
+  		value: function _propsParsed(props) {
+  			var newProps = props;
+  			Object.keys(props).forEach(function (prop) {
+  				if (typeof props[prop] === 'boolean') {
+  					newProps[prop] = props[prop].toString();
+  				}
+  			});
+
+  			return newProps;
+  		}
+  	}, {
   		key: 'render',
   		value: function render() {
   			var _this2 = this;
 
   			var _props = this.props,
-  			    onBlur = _props.onBlur,
-  			    style = _props.style,
-  			    name = _props.name,
-  			    maxLength = _props.maxLength,
-  			    autofocus = _props.autofocus,
-  			    disabled = _props.disabled,
-  			    placeholder = _props.placeholder,
-  			    type = _props.type;
+  			    value = _props.value,
+  			    onChange = _props.onChange,
+  			    otherProps = objectWithoutProperties(_props, ['value', 'onChange']);
 
+  			var parsedProps = this._propsParsed(otherProps);
 
-  			return React__default.createElement('input', {
+  			return React__default.createElement('input', _extends({
   				ref: function ref(_ref) {
   					_this2._input = _ref;
   				},
   				onChange: function onChange(event) {
   					return _this2._onChangeText(event.currentTarget.value);
   				},
-  				value: this.state.value,
-  				type: type,
-  				disabled: disabled,
-  				autofocus: autofocus,
-  				placeholder: placeholder,
-  				name: name,
-  				maxlength: maxLength,
-  				style: style,
-  				onBlur: onBlur
-  			});
+  				value: this.state.value
+  			}, parsedProps));
   		}
   	}]);
   	return TextInputMask;
