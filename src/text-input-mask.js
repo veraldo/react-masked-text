@@ -30,22 +30,27 @@ export default class TextInputMask extends BaseTextComponent {
 		return true;
 	}
 
+	_propsParsed(props) {
+		const newProps = props;
+		Object.keys(props).forEach(prop => {
+				if (typeof props[prop] === 'boolean') {
+					newProps[prop] = props[prop].toString();
+				}
+			});
+
+		return newProps;
+	}
+
 	render() {
-		const { onBlur, style, name, maxLength, autofocus, disabled, placeholder, type } = this.props;
+		const { value, onChange, ...otherProps } = this.props;
+		const parsedProps = this._propsParsed(otherProps);
 
 		return (
 			<input
 				ref={(ref) => {this._input = ref}}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
 				value={this.state.value}
-				type={type}
-				disabled={disabled}
-				autofocus={autofocus}
-				placeholder={placeholder}
-				name={name}
-				maxlength={maxLength}
-				style={style}
-				onBlur={onBlur}
+				{...parsedProps}
 			/>
 		);
 	}
