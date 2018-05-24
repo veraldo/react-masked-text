@@ -42,7 +42,7 @@ export default class TextInputMask extends BaseTextComponent {
 	}
 
 	render() {
-		const { value, onChange, ...otherProps } = this.props;
+		const { value, onChange, onChangeText, ...otherProps } = this.props;
 		const parsedProps = this._propsParsed(otherProps);
 
 		return (
