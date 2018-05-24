@@ -6,7 +6,6 @@ export default class BaseTextComponent extends Component {
         super(props);
         this.state = {
             kind: props.kind,
-            type: props.type,
             value: '',
             options: null
         };
@@ -69,7 +68,6 @@ export default class BaseTextComponent extends Component {
 
         self.setState({
             kind: props.kind,
-            type: props.type,
             options: props.options
         }, () => {
             if(changeMaskHandler) {

@@ -739,7 +739,6 @@
 
           _this.state = {
               kind: props.kind,
-              type: props.type,
               value: '',
               options: null
           };
@@ -807,7 +806,6 @@
 
               self.setState({
                   kind: props.kind,
-                  type: props.type,
                   options: props.options
               }, function () {
                   if (changeMaskHandler) {
