@@ -907,7 +907,8 @@
   			var _props = this.props,
   			    value = _props.value,
   			    onChange = _props.onChange,
-  			    otherProps = objectWithoutProperties(_props, ['value', 'onChange']);
+  			    onChangeText = _props.onChangeText,
+  			    otherProps = objectWithoutProperties(_props, ['value', 'onChange', 'onChangeText']);
 
   			var parsedProps = this._propsParsed(otherProps);
 
