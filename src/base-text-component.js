@@ -4,21 +4,17 @@ import MaskResolver from './mask-resolver';
 export default class BaseTextComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            kind: props.kind,
-            value: '',
-            options: null
-        };
 
-        this._resolveMaskHandler();
+        this._resolveMaskHandler(props.kind);
+        const value = this._getDefaultMaskedValue(props.value);
+        this.state = { value };
     }
 
-    componentDidMount() {
-        this._bindProps(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this._bindProps(nextProps);
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.kind !== nextProps.kind) {
+            this._resolveMaskHandler(nextProps.kind);
+        }
+        return true;
     }
 
     updateValue(text) {
@@ -27,7 +23,7 @@ export default class BaseTextComponent extends Component {
         return new Promise((resolve, reject) => {
             let maskedText = self._getMaskedValue(text);
 
-			if(self._mustUpdateValue(maskedText)) {
+			if(this.state.value !== maskedText) {
 				self.setState({
 					value: maskedText
 				}, () => {
@@ -54,32 +50,8 @@ export default class BaseTextComponent extends Component {
         );
     }
 
-	_mustUpdateValue(newValue) {
-		return this.state.value !== newValue;
-	}
-
-    _resolveMaskHandler() {
-        this._maskHandler = MaskResolver.resolve(this.state.kind);
-    }
-
-    _bindProps(props) {
-        let self = this;
-        let changeMaskHandler = this.state.kind !== props.kind;
-
-        self.setState({
-            kind: props.kind,
-            options: props.options
-        }, () => {
-            if(changeMaskHandler) {
-                self._resolveMaskHandler();
-            }
-
-			let value = self._getDefaultMaskedValue(props.value);
-
-            self.setState({
-                value: value
-            });
-        });
+    _resolveMaskHandler(kind) {
+        this._maskHandler = MaskResolver.resolve(kind);
     }
 
 	_getDefaultMaskedValue(value) {
@@ -95,7 +67,7 @@ export default class BaseTextComponent extends Component {
 
         return this._maskHandler.getValue(
             this._getDefaultValue(value),
-            this.state.options,
+            this.props.options,
             oldValue);
 	}
 
