@@ -1,6 +1,6 @@
 {
   "name": "react-masked-text",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Text and TextInput with mask for React applications, based on benhurott/react-native-masked-text.",
   "licenses": [
     {
@@ -31,21 +31,24 @@
   },
   "homepage": "https://github.com/benhurott/react-masked-text#readme",
   "dependencies": {
-    "moment": "2.22.1",
+    "moment": "2.22.2",
     "tinymask": "1.0.2"
   },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  },
   "devDependencies": {
-    "babel-jest": "23.0.0",
-    "babel-plugin-external-helpers": "6.22.0",
-    "babel-plugin-transform-es2015-destructuring": "6.23.0",
-    "babel-plugin-transform-es2015-parameters": "6.24.1",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-es2015": "6.24.1",
-    "babel-preset-react": "6.24.1",
-    "jest": "23.0.0",
-    "rollup": "0.59.3",
-    "rollup-plugin-babel": "3.0.4",
+    "@babel/core": "7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0",
+    "@babel/plugin-transform-destructuring": "7.0.0",
+    "@babel/plugin-transform-parameters": "7.0.0",
+    "@babel/preset-env": "7.0.0",
+    "@babel/preset-react": "7.0.0",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "rollup": "0.66.2",
+    "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-copy": "0.2.3",
-    "rollup-plugin-node-resolve": "3.3.0"
+    "rollup-plugin-node-resolve": "3.4.0"
   }
 }
