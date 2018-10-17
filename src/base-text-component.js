@@ -63,7 +63,7 @@ export default class BaseTextComponent extends Component {
 	}
 
     _getMaskedValue(value) {
-        let oldValue = this.state.value;
+        let oldValue = this.state && this.value;
 
         return this._maskHandler.getValue(
             this._getDefaultValue(value),
