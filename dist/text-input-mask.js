@@ -903,7 +903,7 @@
     }, {
       key: "_getMaskedValue",
       value: function _getMaskedValue(value) {
-        var oldValue = this.state.value;
+        var oldValue = this.state && this.value;
         return this._maskHandler.getValue(this._getDefaultValue(value), this.props.options, oldValue);
       }
     }, {
