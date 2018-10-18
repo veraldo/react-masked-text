@@ -1,5 +1,6 @@
 import { DatetimeMask } from '../src/masks';
 var moment = require('moment');
+import { parseStringDate } from '../src/masks/internal-dependencies/date-parser';
 
 function compareMomentObj(dateTimeA, dateTimeB) {
     var momentA = moment(dateTimeA,"DD/MM/YYYY");
@@ -39,7 +40,7 @@ test('01011990 with format DD-MM-YYYY results 01-01-1990', () => {
     var mask = new DatetimeMask();
     var expected = '01-01-1990';
     var received = mask.getValue('01011990', {
-        format: 'DD-MM-YYYY HH:mm:ss'
+        format: 'DD-MM-YYYY HH:mm:ss',
     });
 
     expect(received).toBe(expected);
@@ -49,7 +50,7 @@ test('191050 with format HH:mm:ss results 19:10:50 and is valid', () => {
     var mask = new DatetimeMask();
     var input = '191050';
     var settings = {
-        format: 'HH:mm:ss'
+        format: 'HH:mm:ss',
     };
 
     var expected = '19:10:50';
@@ -64,7 +65,7 @@ test('99999999 with format DD/MM/YYYY results 99/99/9999 and is invalid', () => 
     var mask = new DatetimeMask();
     var input = '99999999';
     var settings = {
-        format: 'DD/MM/YYYY'
+        format: 'DD/MM/YYYY',
     };
 
     var expected = '99/99/9999';
@@ -79,7 +80,7 @@ test('01011990174030 with format DD/MM/YYYY HH:mm:ss results 01/01/1990 17:40:30
     var mask = new DatetimeMask();
     var input = '01011990174030';
     var settings = {
-        format: 'DD/MM/YYYY HH:mm:ss'
+        format: 'DD/MM/YYYY HH:mm:ss',
     };
 
     var expected = '01/01/1990 17:40:30';
@@ -93,10 +94,13 @@ test('01011990174030 with format DD/MM/YYYY HH:mm:ss results 01/01/1990 17:40:30
 test('01011990174030 with format DD/MM/YYYY HH:mm:ss results 01/01/1990 17:40:30 and raw value Date', () => {
     var mask = new DatetimeMask();
     var expected = '01/01/1990 17:40:30';
+    var settings = {
+        format: 'DD/MM/YYYY HH:mm:ss',
+    };
     var received = mask.getValue('01011990174030');
 
-    var expectedRawValue = moment(received, 'DD/MM/YYYY HH:mm:ss', true);
-    var receivedRawValue = mask.getRawValue(received); 
+    var expectedRawValue = parseStringDate(received, settings.format);
+    var receivedRawValue = mask.getRawValue(received, settings);
 
     expect(received).toBe(expected);
     expect(compareMomentObj(receivedRawValue, expectedRawValue)).toBe(0);

@@ -1,10 +1,9 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('moment'), require('react')) :
-  typeof define === 'function' && define.amd ? define(['moment', 'react'], factory) :
-  (global.ReactTextMask = factory(global.moment,global.react));
-}(this, (function (moment,React) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
+  typeof define === 'function' && define.amd ? define(['react'], factory) :
+  (global.ReactTextMask = factory(global.react));
+}(this, (function (React) { 'use strict';
 
-  moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
   var React__default = 'default' in React ? React['default'] : React;
 
   function _classCallCheck(instance, Constructor) {
@@ -518,6 +517,98 @@
     return CustomMask;
   }(BaseMask);
 
+  /**
+   * Parses a datetime (ex: 01/01/1990 17:40:30) given a format (ex: DD/MM/YYYY HH:mm:ss)
+   * Nowadays, this parsers supports:
+   * - MM   = 01..12	Month number
+   * - DD   = 01..31	Day of month
+   * - YYYY = 4 or 2 digit year (ex= 2018)
+   * - YY   = 2 digit year (ex= 18)
+   * - HH   = 0..23	Hours (24 hour time)
+   * - hh   = 1..12	Hours (12 hour time used with a A.)
+   * - kk   = 1..24	Hours (24 hour time from 1 to 24)
+   * - aa   = m pm	Post or ante meridiem (Note the one character a p are also considered valid)
+   * - mm   = 0..59	Minutes
+   * - ss   = 0..59	Seconds
+  */
+  var parseStringDate = function parseStringDate(input, format) {
+    if (input.length !== format.length) {
+      return null;
+    }
+
+    var componentsOfFormatFromInput = format.split('').reduce(function (acc, curr, index) {
+      acc[curr] = "".concat(acc[curr] || '').concat(input[index]);
+      return acc;
+    }, {}); // parse each component of format to a dateComponent (year, monthIndex etc...)
+    // in order to build a Date object
+
+    var dateComponents = validChars.reduce(function (acc, curr) {
+      acc[curr] = strToDateComponent[curr](componentsOfFormatFromInput[curr]);
+      return acc;
+    }, {});
+
+    if (Object.values(dateComponents).some(function (component) {
+      return component === null;
+    })) {
+      return null;
+    }
+
+    var year = dateComponents['Y'];
+    var monthIndex = dateComponents['M'];
+    var day = dateComponents['D'];
+    var hours = dateComponents['h'] && dateComponents['a'] ? dateComponents['h'] + (dateComponents['a'] === AMPM.PM ? 12 : 0) : dateComponents['H'];
+    var minutes = dateComponents['m'];
+    var seconds = dateComponents['s'];
+    var date = new Date(year, monthIndex, day, hours, minutes, seconds);
+    return date;
+  }; ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  var validChars = ['Y', 'M', 'D', 'H', 'h', 'a', 'm', 's'];
+  var AMPM = {
+    AM: 0,
+    PM: 1
+  };
+  var now = new Date();
+  var strToDateComponent = {
+    Y: function Y(str) {
+      return str ? Number(str) : now.getYear();
+    },
+    M: function M(str) {
+      var month = str ? Number(str) - 1 : now.getMonth();
+      return month >= 0 && month <= 11 ? month : null;
+    },
+    D: function D(str) {
+      return str ? Number(str) : now.getDay();
+    },
+    H: function H(str) {
+      var hour = str ? Number(str) : now.getHours();
+      return hour >= 0 && hour <= 23 ? hour : null;
+    },
+    h: function h(str) {
+      var hour = str ? Number(str) : now.getHours() % 12;
+      return hour >= 0 && hour <= 12 ? hour : null;
+    },
+    a: function a(str) {
+      if (!str) return undefined;
+
+      if (str.toLowerCase() === 'am') {
+        return AMPM.AM;
+      } else if (str.toLowerCase() === 'pm') {
+        return AMPM.PM;
+      } else {
+        return null;
+      }
+    },
+    m: function m(str) {
+      var minute = str ? Number(str) : now.getMinutes();
+      return minute >= 1 && minute <= 59 ? minute : null;
+    },
+    s: function s(str) {
+      var second = str ? Number(str) : now.getSeconds();
+      return second >= 1 && second <= 59 ? second : null;
+    }
+  };
+
   var DATETIME_MASK_SETTINGS = {
     format: 'DD/MM/YYYY HH:mm:ss'
   };
@@ -550,7 +641,7 @@
       value: function getRawValue(maskedValue, settings) {
         var mergedSettings = this._getMergedSettings(settings);
 
-        return moment(maskedValue, mergedSettings.format, true);
+        return parseStringDate(maskedValue, mergedSettings.format);
       }
     }, {
       key: "validate",
@@ -559,13 +650,23 @@
 
         var mergedSettings = this._getMergedSettings(settings);
 
-        var isValid = moment(maskedValue, mergedSettings.format, true).isValid();
+        var date = parseStringDate(maskedValue, mergedSettings.format);
+
+        var isValid = this._isValidDate(date);
+
         return isValid;
       }
     }, {
       key: "_getMergedSettings",
       value: function _getMergedSettings(settings) {
         return _get(_getPrototypeOf(DatetimeMask.prototype), "mergeSettings", this).call(this, DATETIME_MASK_SETTINGS, settings);
+      }
+      /** https://stackoverflow.com/a/1353711/3670829 */
+
+    }, {
+      key: "_isValidDate",
+      value: function _isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
       }
     }], [{
       key: "getType",
