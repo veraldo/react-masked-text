@@ -12,7 +12,7 @@
  * - mm   = 0..59	Minutes
  * - ss   = 0..59	Seconds
 */
-export const parseStringDate = (input, format) => {
+exports.parseStringDate = (input, format) => {
   if (input.length !== format.length) {
     return null;
   }

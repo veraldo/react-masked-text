@@ -1,6 +1,6 @@
 import { DatetimeMask } from '../src/masks';
 var moment = require('moment');
-import { parseStringDate } from '../src/masks/internal-dependencies/date-parser';
+const { parseStringDate } = require('../src/masks/internal-dependencies/date-parser.js');
 
 function compareMomentObj(dateTimeA, dateTimeB) {
     var momentA = moment(dateTimeA,"DD/MM/YYYY");

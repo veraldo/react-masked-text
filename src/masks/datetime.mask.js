@@ -1,5 +1,5 @@
 import BaseMask from './_base.mask';
-import { parseStringDate } from './internal-dependencies/date-parser';
+const { parseStringDate } = require('./internal-dependencies/date-parser.js');
 
 const DATETIME_MASK_SETTINGS = {
     format: 'DD/MM/YYYY HH:mm:ss',
