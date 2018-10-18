@@ -1,10 +1,9 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('moment'), require('react')) :
-  typeof define === 'function' && define.amd ? define(['moment', 'react'], factory) :
-  (global.ReactTextMask = factory(global.moment,global.react));
-}(this, (function (moment,React) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
+  typeof define === 'function' && define.amd ? define(['react'], factory) :
+  (global.ReactTextMask = factory(global.react));
+}(this, (function (React) { 'use strict';
 
-  moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
   var React__default = 'default' in React ? React['default'] : React;
 
   function _classCallCheck(instance, Constructor) {
@@ -518,6 +517,9 @@
     return CustomMask;
   }(BaseMask);
 
+  var _require = require('./internal-dependencies/date-parser.js'),
+      parseStringDate = _require.parseStringDate;
+
   var DATETIME_MASK_SETTINGS = {
     format: 'DD/MM/YYYY HH:mm:ss'
   };
@@ -550,7 +552,7 @@
       value: function getRawValue(maskedValue, settings) {
         var mergedSettings = this._getMergedSettings(settings);
 
-        return moment(maskedValue, mergedSettings.format, true);
+        return parseStringDate(maskedValue, mergedSettings.format);
       }
     }, {
       key: "validate",
@@ -559,13 +561,23 @@
 
         var mergedSettings = this._getMergedSettings(settings);
 
-        var isValid = moment(maskedValue, mergedSettings.format, true).isValid();
+        var date = parseStringDate(maskedValue, mergedSettings.format);
+
+        var isValid = this._isValidDate(date);
+
         return isValid;
       }
     }, {
       key: "_getMergedSettings",
       value: function _getMergedSettings(settings) {
         return _get(_getPrototypeOf(DatetimeMask.prototype), "mergeSettings", this).call(this, DATETIME_MASK_SETTINGS, settings);
+      }
+      /** https://stackoverflow.com/a/1353711/3670829 */
+
+    }, {
+      key: "_isValidDate",
+      value: function _isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
       }
     }], [{
       key: "getType",

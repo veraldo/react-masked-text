@@ -19,9 +19,8 @@ export default {
   globals: {
     react: 'React'
   },
-  external: [ 'moment', 'react' ],
+  external: [ 'react' ],
   globals: {
-    moment: 'moment',
     react: 'react'
   },
   plugins: [

@@ -3,7 +3,6 @@
 This is a simple masked text (normal text and input text) component for React.
 
 Thanks to [vanilla-masker](https://github.com/BankFacil/vanilla-masker) =).
-Thanks to [moment](http://momentjs.com/) =).
 Thanks to [benhurott](https://github.com/benhurott/react-native-masked-text)
 
 ## Supported Versions
@@ -30,7 +29,7 @@ export default class MyComponent extends Component {
 		//	   because in this case, the day and the hour is invalid.
 		let valid = this.refs['myDateText'].isValid();
 
-		// get converted value. Using kind=datetime, it returns the moment object.
+		// get converted value. Using kind=datetime, it returns the Date object.
 		// If it's using kind=money, it returns a Number object.
 		let rawValue = this.refs['myDateText'].getRawValue();
 	}
@@ -61,7 +60,7 @@ export default class MyComponent extends Component {
 *only-numbers*: accept only numbers on field with `numeric` keyboard. <br />
 *money*: use the mask `R$ 0,00` on the field with `numeric` keyboard. It accepts options (see later in this doc). <br />
 *cel-phone*: use the mask `(99) 9999-9999` or `(99) 99999-9999` (changing automaticaly by length). It accepts options (see later in this doc). <br />
-*datetime*: use datetime mask with moment format (default DD/MM/YYYY HH:mm:ss). It accepts options (see later in this doc). <br />
+*datetime*: use datetime mask with a similiar [moment](https://momentjs.com/docs/#/parsing/string-format/) format (default DD/MM/YYYY HH:mm:ss). It accepts options (see later in this doc). <br />
 *custom*: use your custom mask (see the options props later in this doc). <br />
 
 
@@ -130,6 +129,7 @@ Some kinds accept options, use it like this: `<TextInputMask kind={'money'} opti
 		* YYYY/MM/DD
 		* HH:mm:ss
 		* HH:mm
+		* hh:mm aa
 		* HH
 		* *You can use all of dates with `-` instead of `/` if you want*
 
@@ -216,7 +216,7 @@ Some kinds accept options, use it like this: `<TextInputMask kind={'money'} opti
 	* *only-numbers*: return the value without mask.
 	* *money*: return the Number value. Ex: `R$ 1.234,56` returns `1234.56`.
 	* *cel-phone*: return the value without mask.
-	* *datetime*: return the `moment` object for the date and format.
+	* *datetime*: return a Date object for the date and format.
 	* *custom*: use custom method (passed in options). If it not exists, returns the current value.
 
 
