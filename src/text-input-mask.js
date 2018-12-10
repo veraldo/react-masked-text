@@ -1,5 +1,5 @@
 import BaseTextComponent from './base-text-component';
-import React from 'react'; 
+import React from 'react';
 
 export default class TextInputMask extends BaseTextComponent {
 
@@ -24,7 +24,8 @@ export default class TextInputMask extends BaseTextComponent {
 
 	_checkText(text) {
 		if (this.props.checkText) {
-			return this.props.checkText(this.state.value, text);
+			const value = this._isControlled() ? this.props.value : this.state.value;
+			return this.props.checkText(value, text);
 		}
 
 		return true;
@@ -42,14 +43,15 @@ export default class TextInputMask extends BaseTextComponent {
 	}
 
 	render() {
-		const { value, onChange, onChangeText, ...otherProps } = this.props;
+		const { defaultValue, value, onChange, onChangeText, ...otherProps } = this.props;
 		const parsedProps = this._propsParsed(otherProps);
+		const maskedValue = this._getDefaultMaskedValue(this._isControlled() ? value : this.state.value)
 
 		return (
 			<input
 				ref={(ref) => {this._input = ref}}
 				onChange={(event) => this._onChangeText(event.currentTarget.value)}
-				value={this.state.value}
+				value={maskedValue}
 				{...parsedProps}
 			/>
 		);

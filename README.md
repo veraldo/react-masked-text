@@ -51,6 +51,13 @@ export default class MyComponent extends Component {
 
 ### Props
 
+#### value
+If you set this prop, this component becomes a controlled component.
+
+#### defaultValue
+Use this props if you're using this component as an uncontrolled component and you want to set its default value (initial value).
+You may notice that it doesn't make sense to set value and defaultValue at the same time.
+
 #### kind
 
 *credit-card*: use the mask 9999 9999 9999 9999. It accepts options (see later in this doc). <br />

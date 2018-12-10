@@ -6,7 +6,7 @@ export default class BaseTextComponent extends Component {
         super(props);
 
         this._resolveMaskHandler(props.kind);
-        const value = this._getDefaultMaskedValue(props.value);
+        const value = this._getDefaultMaskedValue(props.defaultValue);
         this.state = { value };
     }
 
@@ -22,32 +22,38 @@ export default class BaseTextComponent extends Component {
 
         return new Promise((resolve, reject) => {
             let maskedText = self._getMaskedValue(text);
+            if (self._isControlled()) {
+                resolve(maskedText);
+                return;
+            }
 
-			if(this.state.value !== maskedText) {
-				self.setState({
-					value: maskedText
-				}, () => {
-					resolve(maskedText);
-				});
-			}
-			else {
-				resolve(this.state.value);
-			}
+            if (this.state.value == maskedText) {
+                resolve(this.state.value);
+                return;
+            }
+
+            self.setState({ value: maskedText }, () => resolve(maskedText));
         });
     }
 
     isValid() {
+        const value = this._isControlled() ? this.props.value : this.state.value;
         return this._maskHandler.validate(
-            this._getDefaultValue(this.state.value),
+            this._getDefaultValue(value),
             this.state.options
         );
     }
 
     getRawValue() {
+        const value = this._isControlled() ? this.props.value : this.state.value;
         return this._maskHandler.getRawValue(
-            this._getDefaultValue(this.state.value),
+            this._getDefaultValue(value),
             this.state.options
         );
+    }
+
+    _isControlled() {
+        return this.props.value !== undefined && this.props.value !== null;
     }
 
     _resolveMaskHandler(kind) {
