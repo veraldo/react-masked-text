@@ -851,7 +851,7 @@
 
       _this._resolveMaskHandler(props.kind);
 
-      var value = _this._getDefaultMaskedValue(props.value);
+      var value = _this._getDefaultMaskedValue(props.defaultValue);
 
       _this.state = {
         value: value
@@ -877,26 +877,39 @@
         return new Promise(function (resolve, reject) {
           var maskedText = self._getMaskedValue(text);
 
-          if (_this2.state.value !== maskedText) {
-            self.setState({
-              value: maskedText
-            }, function () {
-              resolve(maskedText);
-            });
-          } else {
-            resolve(_this2.state.value);
+          if (self._isControlled()) {
+            resolve(maskedText);
+            return;
           }
+
+          if (_this2.state.value == maskedText) {
+            resolve(_this2.state.value);
+            return;
+          }
+
+          self.setState({
+            value: maskedText
+          }, function () {
+            return resolve(maskedText);
+          });
         });
       }
     }, {
       key: "isValid",
       value: function isValid() {
-        return this._maskHandler.validate(this._getDefaultValue(this.state.value), this.state.options);
+        var value = this._isControlled() ? this.props.value : this.state.value;
+        return this._maskHandler.validate(this._getDefaultValue(value), this.state.options);
       }
     }, {
       key: "getRawValue",
       value: function getRawValue() {
-        return this._maskHandler.getRawValue(this._getDefaultValue(this.state.value), this.state.options);
+        var value = this._isControlled() ? this.props.value : this.state.value;
+        return this._maskHandler.getRawValue(this._getDefaultValue(value), this.state.options);
+      }
+    }, {
+      key: "_isControlled",
+      value: function _isControlled() {
+        return this.props.value !== undefined && this.props.value !== null;
       }
     }, {
       key: "_resolveMaskHandler",
@@ -967,7 +980,8 @@
       key: "_checkText",
       value: function _checkText(text) {
         if (this.props.checkText) {
-          return this.props.checkText(this.state.value, text);
+          var value = this._isControlled() ? this.props.value : this.state.value;
+          return this.props.checkText(value, text);
         }
 
         return true;
@@ -989,12 +1003,15 @@
         var _this = this;
 
         var _this$props = this.props,
+            defaultValue = _this$props.defaultValue,
             value = _this$props.value,
             onChange = _this$props.onChange,
             onChangeText = _this$props.onChangeText,
-            otherProps = _objectWithoutProperties(_this$props, ["value", "onChange", "onChangeText"]);
+            otherProps = _objectWithoutProperties(_this$props, ["defaultValue", "value", "onChange", "onChangeText"]);
 
         var parsedProps = this._propsParsed(otherProps);
+
+        var maskedValue = this._getDefaultMaskedValue(this._isControlled() ? value : this.state.value);
 
         return React__default.createElement("input", _extends({
           ref: function ref(_ref) {
@@ -1003,7 +1020,7 @@
           onChange: function onChange(event) {
             return _this._onChangeText(event.currentTarget.value);
           },
-          value: this.state.value
+          value: maskedValue
         }, parsedProps));
       }
     }]);
