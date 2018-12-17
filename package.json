@@ -1,6 +1,6 @@
 {
   "name": "react-masked-text",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Text and TextInput with mask for React applications, based on benhurott/react-native-masked-text.",
   "licenses": [
     {
@@ -49,7 +49,7 @@
     "jest": "23.6.0",
     "react": "16.0.0",
     "react-dom": "^16.5.2",
-    "react-test-renderer": "^16.5.2",
+    "react-test-renderer": "16.6.3",
     "rollup": "0.66.2",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-copy": "0.2.3",

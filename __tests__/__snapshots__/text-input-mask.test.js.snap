@@ -8,6 +8,14 @@ exports[`TextInputMask renders controlled component 1`] = `
 />
 `;
 
+exports[`TextInputMask renders controlled component 2`] = `
+<input
+  kind="cpf"
+  onChange={[Function]}
+  value="123.123"
+/>
+`;
+
 exports[`TextInputMask renders controlled component with initial value 1`] = `
 <input
   kind="cpf"
@@ -20,6 +28,6 @@ exports[`TextInputMask renders uncontrolled component 1`] = `
 <input
   kind="cpf"
   onChange={[Function]}
-  value=""
+  value="123"
 />
 `;

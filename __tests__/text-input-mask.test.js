@@ -5,20 +5,20 @@ import TextInputMask from '../src/text-input-mask'
 
 test('TextInputMask renders uncontrolled component', () => {
   const component = renderer.create(
-    <TextInputMask kind='cpf'/>
+    <TextInputMask kind='cpf' defaultValue='123'/>
   );
   let tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
 
 test('TextInputMask renders controlled component', () => {
-  const value = '';
-  const onChange = (val) => value = val;
-  const component = renderer.create(
-    <TextInputMask kind='cpf' onChangeText={onChange} value={value}/>
-  );
-  let tree = component.toJSON();
+  const component = renderer.create( <TextInputMask kind='cpf' value={''}/>);
+  const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
+
+  component.update( <TextInputMask kind='cpf' value={'123123'}/>);
+  const updatedTree = component.toJSON();
+  expect(updatedTree).toMatchSnapshot();
 });
 
 test('TextInputMask renders controlled component with initial value', () => {
