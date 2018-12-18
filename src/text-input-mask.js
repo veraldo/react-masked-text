@@ -47,6 +47,10 @@ export default class TextInputMask extends BaseTextComponent {
 		const parsedProps = this._propsParsed(otherProps);
 		const maskedValue = this._getDefaultMaskedValue(this._isControlled() ? value : this.state.value)
 
+		if (value && defaultValue) {
+			console.error(`react-masked-text: ERROR - defaultValue and value shouldn't be set at the same time!`);
+		}
+
 		return (
 			<input
 				ref={(ref) => {this._input = ref}}
