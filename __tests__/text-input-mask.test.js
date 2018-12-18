@@ -28,7 +28,7 @@ test('TextInputMask renders hybrid component (controlled and uncontrolled). This
   // https://stackoverflow.com/a/45423405/3670829
   console["error"] = jest.fn(storeLog);
 
-  const component = renderer.create( <TextInputMask kind='cpf' value={'123'} defaultValue={'321'}/>);
+  const component = renderer.create( <TextInputMask kind='cpf' value={'123'} defaultValue={''}/>);
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
   expect(outputData).toBe("react-masked-text: ERROR - defaultValue and value shouldn't be set at the same time!");
