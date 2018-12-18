@@ -53,7 +53,7 @@ export default class BaseTextComponent extends Component {
     }
 
     _isControlled() {
-        return this.props.value !== undefined && this.props.value !== null;
+        return this.props.value !== undefined;
     }
 
     _resolveMaskHandler(kind) {

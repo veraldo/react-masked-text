@@ -909,7 +909,7 @@
     }, {
       key: "_isControlled",
       value: function _isControlled() {
-        return this.props.value !== undefined && this.props.value !== null;
+        return this.props.value !== undefined;
       }
     }, {
       key: "_resolveMaskHandler",
@@ -928,7 +928,7 @@
     }, {
       key: "_getMaskedValue",
       value: function _getMaskedValue(value) {
-        var oldValue = this.state && this.value;
+        var oldValue = this.state && this.state.value;
         return this._maskHandler.getValue(this._getDefaultValue(value), this.props.options, oldValue);
       }
     }, {
@@ -1012,6 +1012,10 @@
         var parsedProps = this._propsParsed(otherProps);
 
         var maskedValue = this._getDefaultMaskedValue(this._isControlled() ? value : this.state.value);
+
+        if (value !== undefined && defaultValue !== undefined) {
+          console.error("react-masked-text: ERROR - defaultValue and value shouldn't be set at the same time!");
+        }
 
         return React__default.createElement("input", _extends({
           ref: function ref(_ref) {

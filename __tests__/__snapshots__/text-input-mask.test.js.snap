@@ -24,6 +24,14 @@ exports[`TextInputMask renders controlled component with initial value 1`] = `
 />
 `;
 
+exports[`TextInputMask renders hybrid component (controlled and uncontrolled). This is not recommended and will throw an error on the console. 1`] = `
+<input
+  kind="cpf"
+  onChange={[Function]}
+  value="123"
+/>
+`;
+
 exports[`TextInputMask renders uncontrolled component 1`] = `
 <input
   kind="cpf"
